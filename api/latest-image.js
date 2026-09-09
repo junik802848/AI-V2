@@ -1,5 +1,7 @@
 module.exports = async function handler(req, res) {
-  const base = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
+  const rawUrl = String(process.env.SUPABASE_URL || '').trim().replace(/^['"]|['"]$/g, '');
+  let base = rawUrl;
+  try { base = new URL(rawUrl).origin; } catch {}
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
   if (!base || !key) return res.status(503).json({ error: 'Supabase is not configured' });
   try {

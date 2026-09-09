@@ -3,9 +3,10 @@ module.exports = async function handler(req, res) {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
   if (!base || !key) return res.status(503).json({ error: 'Supabase is not configured' });
   try {
-    const r = await fetch(`${base}/rest/v1/tbm_files?select=public_url,file_name,created_at,mime_type&page=eq.tbm40&order=created_at.desc&limit=10`, { headers: { Authorization: `Bearer ${key}`, apikey: key } });
+    const r = await fetch(`${base}/storage/v1/object/list/tbm-files`, { method: 'POST', headers: { Authorization: `Bearer ${key}`, apikey: key, 'Content-Type': 'application/json' }, body: JSON.stringify({ prefix: 'tbm40', limit: 100, sortBy: { column: 'created_at', order: 'desc' } }) });
     const rows = await r.json();
     if (!r.ok) return res.status(500).json({ error: 'Latest image lookup failed', detail: Array.isArray(rows) ? 'empty' : (rows.message || rows.hint || rows.code || 'supabase error') });
-    return res.status(200).json({ image: rows.find(function(x){return String(x.mime_type||"").indexOf("image/")===0}) || rows[0] || null });
+    const item = Array.isArray(rows) && rows.find(function(x){return /\.(png|jpe?g|webp|gif)$/i.test(String(x.name||''))});
+    return res.status(200).json({ image: item ? { public_url: `${base}/storage/v1/object/public/tbm-files/${item.name}`, file_name: item.name } : null });
   } catch (e) { return res.status(500).json({ error: 'Latest image lookup failed', detail: Array.isArray(rows) ? 'empty' : (rows.message || rows.hint || rows.code || 'supabase error') }); }
 };

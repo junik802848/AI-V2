@@ -20,7 +20,9 @@ async function uploadAndRecord({ body, contentType, fileName, page, slot, expire
     method: 'POST', headers: { Authorization: `Bearer ${cfg.key}`, apikey: cfg.key, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
     body: JSON.stringify({ page, slot: slot == null ? null : Number(slot), file_name: fileName || safe, mime_type: contentType, storage_path: path, public_url: publicUrl, expires_at: expiresAt || null, delete_protected: !!protectedFlag })
   });
-  if (!record.ok) throw new Error(`Supabase metadata save failed (${record.status})`);
+  // Storage is the source used by QR lookup. Metadata is helpful but must not
+  // turn a successfully uploaded image into a fallback/non-Supabase response.
+  if (!record.ok) console.error(`Supabase metadata save failed (${record.status})`);
   return { url: publicUrl, path };
 }
 

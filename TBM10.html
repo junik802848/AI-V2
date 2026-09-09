@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Safety TBM Maker</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap');
+    *{box-sizing:border-box}html,body{width:100%;height:100%;margin:0}
+    body{overflow:hidden;background:#071827;color:#fff;font-family:"Orbitron","Malgun Gothic",sans-serif}
+    .scene{width:100%;height:100%;display:grid;place-items:center;position:relative;isolation:isolate;overflow:hidden;background:radial-gradient(circle at 50% 48%,#17476a 0,#0e2e4b 22%,#071827 63%,#040d16 100%)}
+    .scene:before,.scene:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);z-index:-1}
+    .scene:before{width:70vmin;height:70vmin;border:1px solid #4ed5ff35;box-shadow:0 0 80px #2baee933,inset 0 0 80px #2baee922;animation:pulse 4s ease-in-out infinite}
+    .scene:after{width:42vmin;height:42vmin;border:1px solid #e8862850;box-shadow:0 0 100px #e8862830;animation:spin 18s linear infinite}
+    .grid{position:absolute;inset:0;opacity:.18;background-image:linear-gradient(#54c8ed22 1px,transparent 1px),linear-gradient(90deg,#54c8ed22 1px,transparent 1px);background-size:70px 70px;transform:perspective(450px) rotateX(58deg) scale(1.5);transform-origin:center bottom;bottom:-35%;animation:gridmove 8s linear infinite}
+    .eyebrow{position:absolute;top:12%;font:700 13px "Malgun Gothic",sans-serif;letter-spacing:5px;color:#9bc2d6;opacity:.9}
+    .title{position:absolute;top:20%;left:0;right:0;text-align:center;font-size:clamp(42px,7vw,94px);font-weight:900;letter-spacing:4px;line-height:1.1;text-shadow:0 0 8px #fff,0 0 24px #4ed5ff,0 0 55px #238fc9;animation:float 3s ease-in-out infinite}
+    .title:after{content:"";position:absolute;left:22%;right:22%;bottom:-24px;height:3px;background:linear-gradient(90deg,transparent,#e88628,#4ed5ff,transparent);box-shadow:0 0 16px #e88628}
+    .actions{position:absolute;top:55%;display:flex;gap:24px;z-index:2}.action{width:310px;height:150px;border:1px solid #ffffff80;border-radius:20px;display:grid;place-items:center;text-decoration:none;color:#fff;font:900 25px "Malgun Gothic",sans-serif;letter-spacing:2px;text-shadow:0 3px 10px #000;background-size:cover;background-position:center;box-shadow:inset 0 -55px 65px #06121db8,0 8px 22px #00000055;transition:.25s}.action:hover{transform:translateY(-6px);border-color:#f6b268;box-shadow:inset 0 -45px 55px #06121d66,0 12px 30px #e8862880}.tbm{background-image:linear-gradient(90deg,#06121d44,#06121db8),url('tbm-button-photo.png')}.qr{background-image:linear-gradient(90deg,#06121d44,#06121db8),url('qr-button-photo.png')}
+    .hint{position:absolute;bottom:34px;letter-spacing:3px;color:#9bc2d6;font:12px "Malgun Gothic",sans-serif;opacity:.8;animation:blink 2s ease-in-out infinite}
+    @keyframes pulse{50%{transform:scale(1.08);opacity:.55}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes gridmove{to{background-position:0 70px,70px 0}}@keyframes float{50%{transform:translateY(-7px)}}@keyframes blink{50%{opacity:.35}}
+    @media(max-width:700px){.title{top:16%;font-size:38px}.actions{top:53%;flex-direction:column;gap:14px}.action{width:280px;height:110px}.eyebrow{top:9%;font-size:10px}}
+  </style>
+<style id="topbar-fixed-style">body{padding-top:108px!important}.top{position:fixed!important;top:14px!important;left:30px!important;right:30px!important;z-index:1000!important;margin:0!important}@media(max-width:950px){body{padding-top:130px!important}.top{top:10px!important;left:15px!important;right:15px!important}}</style><style id="global-pointer-effects">a,button,label[for],select,input[type="checkbox"],input[type="radio"]{cursor:pointer}button,a,label[for]{transition:transform .16s ease,filter .16s ease,box-shadow .16s ease}button:hover,a:hover,label[for]:hover{filter:brightness(1.05)}button:active,a:active,label[for]:active{transform:translateY(1px)}button:focus-visible,a:focus-visible,label[for]:focus-within,select:focus-visible,input:focus-visible{outline:3px solid #f28a00;outline-offset:2px}</style></head>
+<body><main class="scene"><div class="grid"></div><div class="eyebrow">AI SAFETY · FIELD CONTROL</div><div class="title">AI Safety TBM Maker</div><div class="actions"><a class="action tbm" href="TBM20.html">TBM</a><a class="action qr" href="TBM11.html">QR코드</a></div><div class="hint">SELECT A MODULE TO ENTER</div></main></body>
+</html>
+
+
+
+
+<style>body{cursor:none}.custom-cursor{position:fixed;width:14px;height:14px;background:red;border:2px solid red;border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%)}.ripple{position:fixed;width:9px;height:9px;border:3px solid red;border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);animation:rip 2.5s ease-out forwards}@keyframes rip{to{width:90px;height:90px;opacity:0}}</style>
+
+
+
+
+
+
+
+
+
+
+
+
+<style id="interaction-style">body{cursor:none!important}.custom-cursor{position:fixed;width:14px;height:14px;background:#f00;border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%)}.ripple{position:fixed;width:9px;height:9px;border:3px solid #f00;border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);animation:rip 2.5s ease-out forwards}@keyframes rip{to{width:90px;height:90px;opacity:0}}</style><script id="interaction-script">(function(){var c=document.createElement("div"),v=document.createElement("canvas"),x=v.getContext("2d"),down=false,points=[],lines=[];c.className="custom-cursor";document.body.appendChild(c);v.style.cssText="position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:99997";document.body.appendChild(v);function resize(){v.width=window.innerWidth;v.height=window.innerHeight}resize();window.addEventListener("resize",resize);window.addEventListener("pointermove",function(e){c.style.left=e.clientX+"px";c.style.top=e.clientY+"px";if(down){var last=points[points.length-1];points.push([e.clientX,e.clientY]);if(last){x.strokeStyle="#f00";x.lineWidth=3;x.lineCap="round";x.beginPath();x.moveTo(last[0],last[1]);x.lineTo(e.clientX,e.clientY);x.stroke()}}});window.addEventListener("pointerdown",function(e){if(e.button===0){down=true;points=[[e.clientX,e.clientY]]}});window.addEventListener("pointerup",function(e){if(e.button===0){if(points.length>1){var copy=[];for(var i=0;i<points.length;i++)copy.push(points[i]);lines.push({p:copy,t:Date.now()});}down=false;points=[]}});window.addEventListener("dblclick",function(e){var r=document.createElement("div");r.className="ripple";r.style.left=e.clientX+"px";r.style.top=e.clientY+"px";document.body.appendChild(r);setTimeout(function(){r.remove()},2600)});function draw(){var now=Date.now();x.clearRect(0,0,v.width,v.height);var kept=[];for(var i=0;i<lines.length;i++){var line=lines[i],age=now-line.t;if(age<5000){kept.push(line);x.strokeStyle="rgba(255,0,0,"+(1-age/5000)+")";x.lineWidth=3;x.lineCap="round";x.beginPath();for(var j=0;j<line.p.length;j++){var q=line.p[j];if(j===0)x.moveTo(q[0],q[1]);else x.lineTo(q[0],q[1])}x.stroke()}}lines=kept;if(down&&points.length>1){x.strokeStyle="#f00";x.lineWidth=3;x.lineCap="round";x.beginPath();for(var k=0;k<points.length;k++){var w=points[k];if(k===0)x.moveTo(w[0],w[1]);else x.lineTo(w[0],w[1])}x.stroke()}requestAnimationFrame(draw)}draw()})();</script>
+
+
+
+
+<style id="topbar-orange-pill-final">.nav a:hover,.nav span:hover,.nav a.current-page,.nav span.current-page,.nav span.active:hover{background:#fff9e9!important;color:#d96b00!important;box-shadow:inset 0 -4px 0 #f28a00!important;border-radius:18px!important}.nav a.current-page,.nav span.current-page{font-weight:800!important}.nav a,.nav span{transition:background .18s,color .18s,box-shadow .18s!important}</style>

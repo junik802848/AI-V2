@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "dependencies": {
+    "@google/genai": "latest",
+    "@vercel/blob": "latest",
+    "qrcode": "^1.5.4"
+  }
+}

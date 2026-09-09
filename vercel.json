@@ -1,0 +1,24 @@
+{
+  "rewrites": [
+    { "source": "/TBM35", "destination": "/TBM35.html" },
+    { "source": "/TBM35/", "destination": "/TBM35.html" },
+    { "source": "/TBM11", "destination": "/TBM11.html" },
+    { "source": "/TBM11/", "destination": "/TBM11.html" }
+    ,{ "source": "/TBM30", "destination": "/TBM35.html" }
+    ,{ "source": "/TBM30/", "destination": "/TBM35.html" }
+    ,{ "source": "/TBM30.html", "destination": "/TBM35.html" }
+  ],
+  "headers": [
+    { "source": "/TBM35.html", "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }] },
+    { "source": "/TBM30.html", "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }] },
+    { "source": "/TBM40.html", "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }] },
+    { "source": "/TBM50.html", "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }] },
+    { "source": "/TBM60.html", "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }] },
+    { "source": "/TBM72.html", "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }] },
+    { "source": "/TBM73.html", "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }] },
+    { "source": "/TBM75.html", "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }] },
+    { "source": "/TBM80.html", "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }] },
+    { "source": "/TBM11.html", "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }] },
+    { "source": "/api/qr", "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }] }
+  ]
+}

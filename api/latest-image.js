@@ -9,6 +9,6 @@ module.exports = async function handler(req, res) {
     const rows = await r.json();
     if (!r.ok) return res.status(500).json({ error: 'Latest image lookup failed', detail: Array.isArray(rows) ? 'empty' : (rows.message || rows.hint || rows.code || 'supabase error') });
     const item = Array.isArray(rows) && rows.find(function(x){return /\.(png|jpe?g|webp|gif)$/i.test(String(x.name||''))});
-    return res.status(200).json({ image: item ? { public_url: `${base}/storage/v1/object/public/tbm-files/${item.name}`, file_name: item.name } : null });
+    return res.status(200).json({ image: item ? { public_url: `${base}/storage/v1/object/public/tbm-files/tbm40/${item.name}`, file_name: item.name } : null });
   } catch (e) { return res.status(500).json({ error: 'Latest image lookup failed', detail: Array.isArray(rows) ? 'empty' : (rows.message || rows.hint || rows.code || 'supabase error') }); }
 };

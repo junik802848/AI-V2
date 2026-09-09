@@ -5,11 +5,12 @@ module.exports = async function handler(req, res) {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
   if (!base || !key) return res.status(503).json({ error: 'Supabase is not configured' });
   try {
-    const r = await fetch(`${base}/storage/v1/object/list/tbm-files`, { method: 'POST', headers: { Authorization: `Bearer ${key}`, apikey: key, 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' }, body: JSON.stringify({ prefix: 'tbm40/', limit: 1000, sortBy: { column: 'created_at', order: 'desc' } }) });
+    const page = String((req.query && req.query.page) || 'tbm40').replace(/[^a-z0-9_-]/gi, '') || 'tbm40';
+    const r = await fetch(`${base}/storage/v1/object/list/tbm-files`, { method: 'POST', headers: { Authorization: `Bearer ${key}`, apikey: key, 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' }, body: JSON.stringify({ prefix: `${page}/`, limit: 1000, sortBy: { column: 'created_at', order: 'desc' } }) });
     const rows = await r.json();
     if (!r.ok) return res.status(500).json({ error: 'Latest image lookup failed', detail: Array.isArray(rows) ? 'empty' : (rows.message || rows.hint || rows.code || 'supabase error') });
     const images = Array.isArray(rows) ? rows.filter(function(x){return /\.(png|jpe?g|webp|gif)$/i.test(String(x.name||''))}) : [];
     const item = images.sort(function(a,b){return Math.max(new Date(b.created_at||0).getTime(),new Date(b.updated_at||0).getTime())-Math.max(new Date(a.created_at||0).getTime(),new Date(a.updated_at||0).getTime()) || Number(String(b.name||'').match(/^\d+/)?.[0]||0)-Number(String(a.name||'').match(/^\d+/)?.[0]||0)})[0];
-    return res.status(200).json({ image: item ? { public_url: `${base}/storage/v1/object/public/tbm-files/tbm40/${item.name}`, file_name: item.name } : null });
+    return res.status(200).json({ image: item ? { public_url: `${base}/storage/v1/object/public/tbm-files/${page}/${item.name}`, file_name: item.name } : null });
   } catch (e) { return res.status(500).json({ error: 'Latest image lookup failed', detail: Array.isArray(rows) ? 'empty' : (rows.message || rows.hint || rows.code || 'supabase error') }); }
 };

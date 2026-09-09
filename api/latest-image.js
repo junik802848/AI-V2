@@ -8,7 +8,8 @@ module.exports = async function handler(req, res) {
     const r = await fetch(`${base}/storage/v1/object/list/tbm-files`, { method: 'POST', headers: { Authorization: `Bearer ${key}`, apikey: key, 'Content-Type': 'application/json' }, body: JSON.stringify({ prefix: 'tbm40', limit: 100, sortBy: { column: 'created_at', order: 'desc' } }) });
     const rows = await r.json();
     if (!r.ok) return res.status(500).json({ error: 'Latest image lookup failed', detail: Array.isArray(rows) ? 'empty' : (rows.message || rows.hint || rows.code || 'supabase error') });
-    const item = Array.isArray(rows) && rows.find(function(x){return /\.(png|jpe?g|webp|gif)$/i.test(String(x.name||''))});
+    const images = Array.isArray(rows) ? rows.filter(function(x){return /\.(png|jpe?g|webp|gif)$/i.test(String(x.name||''))}) : [];
+    const item = images.sort(function(a,b){return new Date(b.created_at||0)-new Date(a.created_at||0) || Number(String(b.name||'').match(/^\d+/)?.[0]||0)-Number(String(a.name||'').match(/^\d+/)?.[0]||0)})[0];
     return res.status(200).json({ image: item ? { public_url: `${base}/storage/v1/object/public/tbm-files/tbm40/${item.name}`, file_name: item.name } : null });
   } catch (e) { return res.status(500).json({ error: 'Latest image lookup failed', detail: Array.isArray(rows) ? 'empty' : (rows.message || rows.hint || rows.code || 'supabase error') }); }
 };

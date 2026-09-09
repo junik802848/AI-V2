@@ -17,6 +17,7 @@ module.exports = async function handler(req, res) {
     const storedSource = await uploadAndRecord({ body: source, contentType: type, fileName: `accident-source.${inputFormat}`, page: 'tbm50' });
     const original = storedSource || (blobToken ? await put(`tbm50-accident-source/${Date.now()}.${inputFormat}`, source, { access: 'public', token: blobToken, contentType: type }) : null);
     if (!original) throw new Error('업로드 저장소가 설정되지 않았습니다.');
+    if (!convertKey) return res.status(200).json({ url: original.url, type, name: `사고사례.${inputFormat}`, viewer: 'office' });
     const jobResponse = await fetch('https://sync.api.cloudconvert.com/v2/jobs', {
       method: 'POST',
       headers: { Authorization: `Bearer ${convertKey}`, 'Content-Type': 'application/json' },

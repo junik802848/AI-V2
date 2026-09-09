@@ -10,7 +10,11 @@ module.exports = async function handler(req, res) {
     const rows = await r.json();
     if (!r.ok) return res.status(500).json({ error: 'Latest image lookup failed', detail: Array.isArray(rows) ? 'empty' : (rows.message || rows.hint || rows.code || 'supabase error') });
     const images = Array.isArray(rows) ? rows.filter(function(x){return /\.(png|jpe?g|webp|gif)$/i.test(String(x.name||''))}) : [];
-    const item = images.sort(function(a,b){return Math.max(new Date(b.created_at||0).getTime(),new Date(b.updated_at||0).getTime())-Math.max(new Date(a.created_at||0).getTime(),new Date(a.updated_at||0).getTime()) || Number(String(b.name||'').match(/^\d+/)?.[0]||0)-Number(String(a.name||'').match(/^\d+/)?.[0]||0)})[0];
+    const item = images.sort(function(a,b){
+      const at = Number(String(a.name||'').match(/^\d+/)?.[0]||0);
+      const bt = Number(String(b.name||'').match(/^\d+/)?.[0]||0);
+      return bt-at || Math.max(new Date(b.created_at||0).getTime(),new Date(b.updated_at||0).getTime())-Math.max(new Date(a.created_at||0).getTime(),new Date(a.updated_at||0).getTime());
+    })[0];
     return res.status(200).json({ image: item ? { public_url: `${base}/storage/v1/object/public/tbm-files/${page}/${item.name}`, file_name: item.name } : null });
   } catch (e) { return res.status(500).json({ error: 'Latest image lookup failed', detail: Array.isArray(rows) ? 'empty' : (rows.message || rows.hint || rows.code || 'supabase error') }); }
 };

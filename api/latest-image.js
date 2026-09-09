@@ -1,4 +1,7 @@
-module.exports = async function handler(req, res) {`r`n  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');`r`n  res.setHeader('Pragma', 'no-cache');`r`n  res.setHeader('Expires', '0');
+module.exports = async function handler(req, res) {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   const rawUrl = String(process.env.SUPABASE_URL || '').trim().replace(/^['"]|['"]$/g, '');
   let base = rawUrl;
   try { base = new URL(rawUrl).origin; } catch {}

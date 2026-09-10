@@ -8,7 +8,7 @@ module.exports = async function handler(req, res) {
   try {
     if (req.method === 'GET') {
       const r = await fetch(`${base}/storage/v1/object/tbm-files/${path}?v=${Date.now()}`, { headers, cache: 'no-store' });
-      if (r.status === 404) return res.status(200).json({ state: null });
+      if (r.status === 404 || r.status === 400) return res.status(200).json({ state: null });
       if (!r.ok) throw Error(`상태 조회 실패 (${r.status})`);
       return res.status(200).json({ state: await r.json() });
     }

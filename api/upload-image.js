@@ -30,7 +30,7 @@ module.exports = async function handler(req, res) {
       if (body.length > 10 * 1024 * 1024) return res.status(413).json({ error: '파일은 10MB 이하만 업로드할 수 있습니다.' });
       const folder = String(req.headers['x-upload-folder'] || 'uploads')
         .toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 30) || 'uploads';
-      const requestedPage = req.headers['x-upload-page'] || (folder === 'ai-v2-tbm40' ? 'ai-v2/tbm40' : folder === 'ai-v2-tbm75' ? 'ai-v2/tbm75' : folder);
+      const requestedPage = req.headers['x-upload-page'] || (folder === 'ai-v2-tbm40' ? 'ai-v2/tbm40' : folder === 'ai-v2-tbm75' ? 'ai-v2/tbm75' : folder === 'tbm73' ? 'ai-v2/tbm73' : folder);
       const ext = type === 'image/png' ? '.png' : type === 'image/webp' ? '.webp' : type === 'image/gif' ? '.gif' : '.jpg';
       const name = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}${ext}`;
     let supabaseFailure = null;

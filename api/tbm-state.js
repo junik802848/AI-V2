@@ -15,6 +15,7 @@ module.exports = async function handler(req, res) {
     if (req.method !== 'PUT') return res.status(405).json({ error: 'Method not allowed' });
     let raw = ''; for await (const c of req) raw += c;
     const body = JSON.parse(raw || '{}');
+    if (page === 'tbm60' && Array.isArray(body.state) && body.state.length === 0) return res.status(200).json({ ok: true, preserved: true });
     const r = await fetch(`${base}/storage/v1/object/tbm-files/${path}`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json', 'x-upsert': 'true', 'Cache-Control': 'no-cache' }, body: JSON.stringify(body.state === undefined ? {} : body.state) });
     if (!r.ok) throw Error(`상태 저장 실패 (${r.status})`);
     return res.status(200).json({ ok: true });

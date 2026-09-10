@@ -5,6 +5,12 @@ module.exports = async function handler(req, res) {
   const page = String((req.query && req.query.page) || 'tbm60').replace(/[^a-z0-9_-]/gi, '').slice(0, 40);
   const path = `ai-v2/state/${page}.json`;
   const headers = { Authorization: `Bearer ${key}`, apikey: key };
+  const emptyState = (v) => {
+    if (v == null || v === '' || v === false || v === 0) return true;
+    if (Array.isArray(v)) return v.length === 0 || v.every(emptyState);
+    if (typeof v === 'object') return Object.values(v).every(emptyState);
+    return false;
+  };
   try {
     if (req.method === 'GET') {
       const r = await fetch(`${base}/storage/v1/object/tbm-files/${path}?v=${Date.now()}`, { headers, cache: 'no-store' });
@@ -15,7 +21,7 @@ module.exports = async function handler(req, res) {
     if (req.method !== 'PUT') return res.status(405).json({ error: 'Method not allowed' });
     let raw = ''; for await (const c of req) raw += c;
     const body = JSON.parse(raw || '{}');
-    if (page === 'tbm60' && Array.isArray(body.state) && body.state.length === 0) return res.status(200).json({ ok: true, preserved: true });
+    if (emptyState(body.state)) return res.status(200).json({ ok: true, preserved: true });
     const r = await fetch(`${base}/storage/v1/object/tbm-files/${path}`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json', 'x-upsert': 'true', 'Cache-Control': 'no-cache' }, body: JSON.stringify(body.state === undefined ? {} : body.state) });
     if (!r.ok) throw Error(`상태 저장 실패 (${r.status})`);
     return res.status(200).json({ ok: true });

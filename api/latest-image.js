@@ -5,10 +5,11 @@ module.exports = async function handler(req, res) {
   const rawUrl = String(process.env.SUPABASE_URL || '').trim().replace(/^['"]|['"]$/g, '');
   let base = rawUrl;
   try { base = new URL(rawUrl).origin; } catch {}
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
+  const key = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!base || !key) return res.status(503).json({ error: 'Supabase is not configured' });
   try {
     let page = String((req.query && req.query.page) || 'tbm40').replace(/[^a-z0-9_-]/gi, '') || 'tbm40';
+    if (page === 'tbm75') page = 'tbm40';
     const storagePage = `ai-v2/${page}`;
     const r = await fetch(`${base}/storage/v1/object/list/tbm-files`, { method: 'POST', headers: { Authorization: `Bearer ${key}`, apikey: key, 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' }, body: JSON.stringify({ prefix: `${storagePage}/`, limit: 1000, sortBy: { column: 'created_at', order: 'desc' } }) });
     const rows = await r.json();

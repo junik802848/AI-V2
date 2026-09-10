@@ -16,7 +16,9 @@ module.exports = async function handler(req, res) {
       const r = await fetch(`${base}/storage/v1/object/tbm-files/${path}?v=${Date.now()}`, { headers, cache: 'no-store' });
       if (r.status === 404 || r.status === 400) return res.status(200).json({ state: null });
       if (!r.ok) throw Error(`상태 조회 실패 (${r.status})`);
-      return res.status(200).json({ state: await r.json() });
+      const state = await r.json();
+      if (page === 'tbm50' && state && Array.isArray(state['tbm50-extracted-checklists']) && emptyState(state['tbm50-extracted-checklists']) && Array.isArray(state['tbm72-grouped-final'])) state['tbm50-extracted-checklists'] = state['tbm72-grouped-final'];
+      return res.status(200).json({ state });
     }
     if (req.method !== 'PUT') return res.status(405).json({ error: 'Method not allowed' });
     let raw = ''; for await (const c of req) raw += c;

@@ -32,12 +32,15 @@ module.exports = async function handler(req, res) {
         .toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 30) || 'uploads';
       const ext = type === 'image/png' ? '.png' : type === 'image/webp' ? '.webp' : type === 'image/gif' ? '.gif' : '.jpg';
       const name = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}${ext}`;
+    let supabaseFailure = null;
     try {
       const supabase = await uploadAndRecord({ body, contentType: type, fileName: req.headers['x-file-name'] || name, page: req.headers['x-upload-page'] || folder, slot: req.headers['x-upload-slot'], expiresAt: req.headers['x-expires-at'], protectedFlag: req.headers['x-delete-protected'] === 'true' });
       if (supabase) return res.status(200).json({ url: supabase.url, storage: 'supabase', provider: 'supabase' });
     } catch (supabaseError) {
+      supabaseFailure = supabaseError;
       console.error('Supabase image upload failed; using Blob fallback:', supabaseError && supabaseError.message);
     }
+    if (folder.startsWith('ai-v2-')) return res.status(502).json({ error: 'Supabase 저장 실패', detail: supabaseFailure && supabaseFailure.message ? supabaseFailure.message : 'Supabase 저장 응답 없음' });
     // Keep the feature usable when this project has no storage credentials yet.
     // The client can still preview the selected image; cloud persistence becomes
     // available automatically once Supabase or Blob environment variables exist.

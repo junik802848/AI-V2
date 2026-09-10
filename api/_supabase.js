@@ -3,7 +3,8 @@ const crypto = require('crypto');
 function config() {
   const url = String(process.env.SUPABASE_URL || '').trim().replace(/^['"]|['"]$/g, '');
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
-  return url && key ? { url: url.replace(/\/$/, ''), key } : null;
+  if (!url || !key) return null;
+  try { return { url: new URL(url).origin, key }; } catch { return null; }
 }
 
 async function uploadAndRecord({ body, contentType, fileName, page, slot, expiresAt, protectedFlag }) {

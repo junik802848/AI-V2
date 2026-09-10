@@ -30,11 +30,12 @@ module.exports = async function handler(req, res) {
       if (body.length > 10 * 1024 * 1024) return res.status(413).json({ error: '파일은 10MB 이하만 업로드할 수 있습니다.' });
       const folder = String(req.headers['x-upload-folder'] || 'uploads')
         .toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 30) || 'uploads';
+      const requestedPage = req.headers['x-upload-page'] || (folder === 'ai-v2-tbm40' ? 'ai-v2/tbm40' : folder === 'ai-v2-tbm75' ? 'ai-v2/tbm75' : folder);
       const ext = type === 'image/png' ? '.png' : type === 'image/webp' ? '.webp' : type === 'image/gif' ? '.gif' : '.jpg';
       const name = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}${ext}`;
     let supabaseFailure = null;
     try {
-      const supabase = await uploadAndRecord({ body, contentType: type, fileName: req.headers['x-file-name'] || name, page: req.headers['x-upload-page'] || folder, slot: req.headers['x-upload-slot'], expiresAt: req.headers['x-expires-at'], protectedFlag: req.headers['x-delete-protected'] === 'true' });
+      const supabase = await uploadAndRecord({ body, contentType: type, fileName: req.headers['x-file-name'] || name, page: requestedPage, slot: req.headers['x-upload-slot'], expiresAt: req.headers['x-expires-at'], protectedFlag: req.headers['x-delete-protected'] === 'true' });
       if (supabase) return res.status(200).json({ url: supabase.url, storage: 'supabase', provider: 'supabase' });
     } catch (supabaseError) {
       supabaseFailure = supabaseError;

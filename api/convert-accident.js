@@ -6,7 +6,6 @@ module.exports = async function handler(req, res) {
   const tokenKey = Object.keys(process.env).find((key) => key.endsWith('_READ_WRITE_TOKEN'));
   const blobToken = (tokenKey && process.env[tokenKey]) || process.env.BLOB_READ_WRITE_TOKEN;
   const convertKey = process.env.CLOUDCONVERT_API_KEY;
-  if (!convertKey) return res.status(500).json({ error: 'CloudConvert API 키가 설정되지 않았습니다.' });
   const type = req.headers['content-type'] || '';
   const inputFormat = type === 'application/vnd.ms-powerpoint' ? 'ppt' : 'pptx';
   if (!['application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation'].includes(type)) return res.status(415).json({ error: 'PPT 또는 PPTX 파일만 지원합니다.' });

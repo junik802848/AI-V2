@@ -1,4 +1,5 @@
 const { put } = require('@vercel/blob');
+const { uploadAndRecord } = require('./_supabase');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });

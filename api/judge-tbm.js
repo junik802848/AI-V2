@@ -33,5 +33,12 @@ module.exports = async function handler(req, res) {
     result.pass = workerCount !== null && signatureCount !== null && workerCount > 0 && signatureCount === workerCount;
     if (!result.pass && workerCount !== null && signatureCount !== null && signatureCount < workerCount) result.reason = `작업인원 ${workerCount}명보다 서명 ${signatureCount}개가 부족합니다.`;
     return res.status(200).json(result);
-  } catch (error) { return res.status(500).json({ error: error.message || 'TBM image analysis failed' }); }
+  } catch (error) {
+    const raw = String(error && error.message || '');
+    let message = 'TBM 이미지 판정 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';
+    if (/quota|rate.limit|resource.exhausted/i.test(raw)) message = 'Gemini AI 사용량 한도를 초과했습니다. 잠시 후 다시 시도하거나 API 요금제와 한도를 확인해 주세요.';
+    else if (/api.?key|unauthenticated|permission|forbidden/i.test(raw)) message = 'Gemini API 키가 없거나 사용할 권한이 없습니다. Vercel 환경변수 GEMINI_API_KEY를 확인해 주세요.';
+    else if (/unable to read image|invalid.*image|image/i.test(raw)) message = '업로드한 이미지를 읽을 수 없습니다. JPG 또는 PNG 이미지로 다시 업로드해 주세요.';
+    return res.status(500).json({ error: message });
+  }
 };
